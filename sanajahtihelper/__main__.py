@@ -1,16 +1,15 @@
-import sys
 from PyQt5.QtWidgets import QApplication
 
-from .gui import MainWindow
+from .gui import WordList
 
 
 def main():
-    app = QApplication(sys.argv)
-    gui = MainWindow()
+    app = QApplication([])
+    gui = WordList()
     gui.setFixedSize(400, 800)
     gui.setWindowTitle('sanajahtihelper')
     gui.show()
-    sys.exit(app.exec_())
+    app.exec_()
 
 
 if __name__ == '__main__':
