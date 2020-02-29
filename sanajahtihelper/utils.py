@@ -1,23 +1,31 @@
-grid = [['a', 'b', 'p', 'r'],
-        ['x', 'a', 'e', 'o'],
-        ['x', 's', 'm', 'i'],
-        ['i', 'm', 's', 'v']]
+from .word_widget import FoundWord
 
-words = ['aasi', 'jalkapallo']
 
 class GridFinder:
-    def __init__(self, words, grid):
-        self.words = words
+    def __init__(self):
+        self.words = self.load_words()
+
+    def load_words(self):
+        with open('./sanajahtihelper/data/finnish_words.txt', 'r',
+        encoding='utf-8') as _file:
+            data = _file.read()
+        return data.replace(',', '').replace('\ufeff', '').split()
+
+    def search(self, grid):
+        found_words = []
         self.grid = grid
-    
+        for word in self.words:
+            if self.word_in_grid(word):
+                found_words.append(FoundWord(word, self.found_indexes))
+        return found_words
+
     def word_in_grid(self, word):
         if not self.lazy_check(word):
             return False
-
         first_letter_indexes = self.letter_indexes_in_grid(word[0])
 
         for index in first_letter_indexes:
-            print('*', index, self.grid[index[0]][index[1]])
+            self.found_indexes = [index]
             if self.index_neighbours(index, word, 0):
                 return True
         return False
@@ -33,7 +41,7 @@ class GridFinder:
         indexes = []
         for x in range(4):
             for y in range(4):
-                if grid[x][y] == letter:
+                if self.grid[x][y] == letter:
                     indexes.append((x, y))
         return indexes
 
@@ -52,6 +60,12 @@ class GridFinder:
         return True
 
     def index_neighbours(self, index, word, letter_index):
+        '''
+        Recursively checks if given grid-index' neighbours include next letter.
+
+        IN: index in grid (x, y), word string, current letters' index in word
+        OUT: boolean, is the word in grid
+        '''
         if letter_index+1 == len(word):
             return True
         x, y = index
@@ -60,13 +74,10 @@ class GridFinder:
                 try:
                     if (self.grid[x+i][y+j] == word[letter_index + 1] and
                         abs(i) + abs(j) != 0):
-                        print(f'({x+i}, {y+j}), {word[letter_index+1]}')
+                        self.found_indexes.append((x+i, y+j))
                         if self.index_neighbours((x+i, y+j), word, letter_index + 1):
                             return True
-
+                # IndexError happens when trying to go out of bounds in grid
                 except IndexError:
                     continue
         return False
-grid_finder = GridFinder(words, grid)
-
-print(grid_finder.word_in_grid("resep"))

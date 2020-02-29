@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QApplication
 
-from .gui import WordList
+from .gui import MainWidget
 
 
 def main():
     app = QApplication([])
-    gui = WordList()
+    gui = MainWidget()
     gui.setFixedSize(400, 800)
     gui.setWindowTitle('sanajahtihelper')
     gui.show()
