@@ -13,6 +13,7 @@ class MainWidget(QtWidgets.QWidget):
         layout.addWidget(self.letter_grid)
         self.setLayout(layout)
 
+
 class WordList(QtWidgets.QListWidget):
     def __init__(self, parent):
         super().__init__()
@@ -20,14 +21,14 @@ class WordList(QtWidgets.QListWidget):
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
             QtWidgets.QSizePolicy.Preferred)
-        self.itemClicked.connect(self.Clicked)
+        self.itemClicked.connect(self.clicked)
 
     def load_found_to_list(self, words):
         self.clear()
         for word in words:
             self.addItem(word)
 
-    def Clicked(self, item):
+    def clicked(self, item):
         self.parent.letter_grid.highlight_indexes(item.indexes)
 
 
@@ -82,6 +83,8 @@ class LetterGrid(QtWidgets.QWidget):
             grid[button.x][button.y] = button.text().lower()
 
         found = self.grid_finder.search(grid)
+        # Sort found words by length
+        found.sort(key=lambda x: len(x.word), reverse=True)
         self.parent.word_list.load_found_to_list(found)
 
     def highlight_indexes(self, indexes):

@@ -39,5 +39,6 @@ class LetterButton(QtWidgets.QPushButton):
 class FoundWord(QtWidgets.QListWidgetItem):
     def __init__(self, word, indexes):
         super().__init__()
-        self.setText(word)
         self.indexes = indexes
+        self.word = word
+        self.setText(self.word)
