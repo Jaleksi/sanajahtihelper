@@ -1,4 +1,4 @@
-from .word_widget import FoundWord
+from .widgets import FoundWord
 
 
 class GridFinder:
@@ -6,6 +6,10 @@ class GridFinder:
         self.words = self.load_words()
 
     def load_words(self):
+        '''
+        Loads 10 000 most used words in Finnish language
+        to self.words from a text file.
+        '''
         with open('./sanajahtihelper/data/finnish_words.txt', 'r',
         encoding='utf-8') as _file:
             data = _file.read()
@@ -66,18 +70,17 @@ class GridFinder:
         IN: index in grid (x, y), word string, current letters' index in word
         OUT: boolean, is the word in grid
         '''
-        if letter_index+1 == len(word):
+        if letter_index + 1 == len(word):
             return True
         x, y = index
         for i in range(-1, 2):
             for j in range(-1, 2):
-                try:
-                    if (self.grid[x+i][y+j] == word[letter_index + 1] and
-                        abs(i) + abs(j) != 0):
+                if x+i in [0, 1, 2, 3] and y+j in [0, 1, 2, 3]:
+                    found_in_neighbour = self.grid[x+i][y+j] == word[letter_index + 1]
+                    not_the_same_index = abs(i) + abs(j) != 0
+                    already_found = (x+i, y+j) in self.found_indexes
+                    if found_in_neighbour and not_the_same_index and not already_found:
                         self.found_indexes.append((x+i, y+j))
                         if self.index_neighbours((x+i, y+j), word, letter_index + 1):
                             return True
-                # IndexError happens when trying to go out of bounds in grid
-                except IndexError:
-                    continue
         return False
