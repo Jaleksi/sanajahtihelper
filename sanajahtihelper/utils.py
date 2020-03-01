@@ -83,4 +83,5 @@ class GridFinder:
                         self.found_indexes.append((x+i, y+j))
                         if self.index_neighbours((x+i, y+j), word, letter_index + 1):
                             return True
+        del self.found_indexes[-1]
         return False
