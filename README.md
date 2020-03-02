@@ -14,7 +14,6 @@ into grid by clicking section of grid and then input letter.
 |Key    |Action |
 |-------|-------|
 |Enter  |Start search|
-|-------|-------|
 |Del    |Clear grid|
 
 Grid must be filled to begin search. 
