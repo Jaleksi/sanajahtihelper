@@ -77,7 +77,7 @@ class LetterGrid(QtWidgets.QWidget):
         if not self.all_buttons_set():
             return
 
-        grid = [[None, None, None, None] for _ in range(4)]
+        grid = [[None for _ in range(4)] for _ in range(4)]
 
         for button in self.button_widgets:
             grid[button.x][button.y] = button.text().lower()

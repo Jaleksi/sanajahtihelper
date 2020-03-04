@@ -33,7 +33,6 @@ class LetterButton(QtWidgets.QPushButton):
 
     def clear_text(self):
         self.setText(None)
-        self.listening = False
 
 
 class FoundWord(QtWidgets.QListWidgetItem):
