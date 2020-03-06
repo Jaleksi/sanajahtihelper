@@ -103,7 +103,7 @@ class LetterGrid(QtWidgets.QWidget):
         # Sort found words by length
         found.sort(key=lambda x: len(x.word), reverse=True)
         self.parent.word_list.load_found_to_list(found)
-        longest_word = max(len(w.word) for w in found)
+        longest_word = max(len(w.word) for w in found) if found else 0
         search_time = '{0:.2f}'.format(time.time() - start_time)
         self.parent.set_status_message(f'Search-time: {search_time}s | ' +
                                        f'Found words: {len(found)} | ' +
