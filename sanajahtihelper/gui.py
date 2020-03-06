@@ -45,15 +45,18 @@ class WordList(QtWidgets.QListWidget):
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Preferred,
             QtWidgets.QSizePolicy.Preferred)
-        self.itemClicked.connect(self.clicked)
+        self.itemSelectionChanged.connect(self.activated_event)
 
     def load_found_to_list(self, words):
         self.clear()
         for word in words:
             self.addItem(word)
 
-    def clicked(self, item):
-        self.parent.letter_grid.highlight_indexes(item.indexes)
+    def activated_event(self):
+        items = self.selectedItems()
+        if not items:
+            return
+        self.parent.letter_grid.highlight_indexes(items[0].indexes)
 
 
 class LetterGrid(QtWidgets.QWidget):
