@@ -1,13 +1,11 @@
 from PyQt5.QtWidgets import QApplication
 
-from .gui import MainWidget
+from .gui import MainWindow
 
 
 def main():
     app = QApplication([])
-    gui = MainWidget()
-    gui.setFixedSize(400, 800)
-    gui.setWindowTitle('sanajahtihelper')
+    gui = MainWindow()
     gui.show()
     app.exec_()
 

@@ -1,15 +1,27 @@
+import time
+
 from PyQt5 import QtWidgets, QtCore
 
 from .utils import GridFinder
 from .widgets import LetterButton
 
 
-class MainWidget(QtWidgets.QWidget):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setMinimumSize(800, 400)
+        self.setWindowTitle('sanajahtihelper')
+        self.setCentralWidget(MainWidget(self))
+        self.statusBar().showMessage('')
+
+
+class MainWidget(QtWidgets.QWidget):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
         self.word_list = WordList(self)
         self.letter_grid = LetterGrid(self)
-        layout = QtWidgets.QVBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self.word_list)
         layout.addWidget(self.letter_grid)
         self.setLayout(layout)
@@ -21,6 +33,9 @@ class MainWidget(QtWidgets.QWidget):
             self.letter_grid.clear_grid()
         elif self.letter_grid.edit_mode and self.letter_grid.listening_buttons():
             self.letter_grid.broadcast_input(event.text().upper())
+
+    def set_status_message(self, msg):
+        self.parent.statusBar().showMessage(msg)
 
 
 class WordList(QtWidgets.QListWidget):
@@ -74,7 +89,10 @@ class LetterGrid(QtWidgets.QWidget):
 
     def start_search(self):
         if not self.all_buttons_set():
+            self.parent.set_status_message('Fill grid completely before search!')
             return
+        self.parent.set_status_message('Search started...')
+        start_time = time.time()
         self.edit_mode = False
         grid = [[None for _ in range(4)] for _ in range(4)]
 
@@ -85,6 +103,11 @@ class LetterGrid(QtWidgets.QWidget):
         # Sort found words by length
         found.sort(key=lambda x: len(x.word), reverse=True)
         self.parent.word_list.load_found_to_list(found)
+        longest_word = max(len(w.word) for w in found)
+        search_time = '{0:.2f}'.format(time.time() - start_time)
+        self.parent.set_status_message(f'Search-time: {search_time}s | ' +
+                                       f'Found words: {len(found)} | ' +
+                                       f'Longest word: {longest_word} letters')
 
     def highlight_indexes(self, indexes):
         for button in self.button_widgets:
