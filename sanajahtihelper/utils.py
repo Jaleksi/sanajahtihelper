@@ -7,8 +7,7 @@ class GridFinder:
 
     def load_words(self):
         '''
-        Loads 10 000 most used words in Finnish language
-        to self.words from a text file.
+        Loads almost 100 000 Finnish words to self.words from a text file.
         '''
         with open('./sanajahtihelper/data/finnish_words.txt', 'r', encoding='utf-8') as f:
             data = f.read()
